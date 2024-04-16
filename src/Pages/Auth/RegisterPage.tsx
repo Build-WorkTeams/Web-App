@@ -11,10 +11,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import RegisterImg from "@/assets/RegisterImg.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MailOpen } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
 import Google from "@/assets/google.svg";
+import apiClient from "@/services/api-client";
 
 const schema = z
   .object({
@@ -33,6 +34,7 @@ const schema = z
 type formData = z.infer<typeof schema>;
 
 const RegisterPage = () => {
+  const navigate = useNavigate();  
   const form = useForm<formData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -44,6 +46,14 @@ const RegisterPage = () => {
 
   const handleRegister = (values: formData) => {
     console.log("Register", values);
+    apiClient
+      .post("/api/accounts/register/", {
+        email: values.email,
+        password: values.password,
+      })
+      .then(() => {
+        navigate('/login');
+      });
   };
   return (
     <div className="w-full lg:grid h-dvh lg:grid-cols-[400px_1fr] xl:grid-cols-[550px_1fr] font-poppinsFont">
