@@ -19,7 +19,7 @@ import Google from "@/assets/google.svg";
 import apiClient from "@/services/api-client";
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
-import { useToast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast";
 import capitalize from "@/utils/capitize";
 
 
@@ -43,9 +43,11 @@ const schema = z
 type formData = z.infer<typeof schema>;
 
 const RegisterPage = () => {
+  //Hooks
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  //States
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<formData>({
