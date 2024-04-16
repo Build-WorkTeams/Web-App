@@ -33,6 +33,11 @@
       --ring: 222.2 84% 4.9%;
 
       --radius: 0.5rem;
+
+      --gray-300: 0, 0%, 20%;
+      --white-300: 0, 0%, 96%;
+      --purple-300: 256, 65%, 44%;
+      --blue-100: 242, 97%, 15%, 0.6;
     }
 
     .dark {
@@ -73,4 +78,11 @@
     body {
       @apply bg-background text-foreground;
     }
+  }
+
+  .colorz {
+    color: rgb(51, 51, 51);
+    color:rgb(78, 39, 185);
+    color: hsl(242, 97%, 15%);
+    color: hsl(0, 0%, 96%);
   }
