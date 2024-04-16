@@ -14,8 +14,10 @@ import RegisterImg from "@/assets/RegisterImg.png";
 import { Link, useNavigate } from "react-router-dom";
 import { MailOpen } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Google from "@/assets/google.svg";
 import apiClient from "@/services/api-client";
+import { useState } from "react";
 
 const schema = z
   .object({
@@ -35,6 +37,9 @@ type formData = z.infer<typeof schema>;
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<formData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -45,6 +50,7 @@ const RegisterPage = () => {
   });
 
   const handleRegister = (values: formData) => {
+    setIsLoading(true);
     apiClient
       .post("/api/accounts/register/", {
         email: values.email,
@@ -52,6 +58,10 @@ const RegisterPage = () => {
       })
       .then(() => {
         navigate("/login");
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
       });
   };
   return (
@@ -153,6 +163,7 @@ const RegisterPage = () => {
                 type="submit"
                 className="w-full py-[20px] md:py-[24px] lg:py-[26px] xl:py-[30px] bg-custom-purple_300 rounded-[80px]"
               >
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Create an Account
               </Button>
             </form>
