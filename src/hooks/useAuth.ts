@@ -1,6 +1,6 @@
 const useAuth = () => {
-  const jwt = localStorage.getItem("jwt");
-  if (jwt) return { user: true };
+  const token = localStorage.getItem("token");
+  if (token) return { user: true };
   return { user: false };
 };
 

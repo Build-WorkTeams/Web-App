@@ -14,8 +14,10 @@ import RegisterImg from "@/assets/RegisterImg.png";
 import { Link, useNavigate } from "react-router-dom";
 import { MailOpen } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Google from "@/assets/google.svg";
 import apiClient from "@/services/api-client";
+import { useState } from "react";
 
 const schema = z
   .object({
@@ -34,7 +36,10 @@ const schema = z
 type formData = z.infer<typeof schema>;
 
 const RegisterPage = () => {
-  const navigate = useNavigate();  
+  const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<formData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -45,14 +50,18 @@ const RegisterPage = () => {
   });
 
   const handleRegister = (values: formData) => {
-    console.log("Register", values);
+    setIsLoading(true);
     apiClient
       .post("/api/accounts/register/", {
         email: values.email,
         password: values.password,
       })
       .then(() => {
-        navigate('/login');
+        navigate("/login");
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
       });
   };
   return (
@@ -154,6 +163,7 @@ const RegisterPage = () => {
                 type="submit"
                 className="w-full py-[20px] md:py-[24px] lg:py-[26px] xl:py-[30px] bg-custom-purple_300 rounded-[80px]"
               >
+                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Create an Account
               </Button>
             </form>
@@ -172,35 +182,3 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
-
-{
-  /* <div className="grid gap-4">
-<div className="grid gap-2">
-  <Label htmlFor="email">Email</Label>
-  <Input
-    id="email"
-    type="email"
-    placeholder="m@example.com"
-    required
-  />
-</div>
-<div className="grid gap-2">
-  <div className="flex items-center">
-    <Label htmlFor="password">Password</Label>
-    <Button
-      href="/forgot-password"
-      className="ml-auto inline-block text-sm underline"
-    >
-      Forgot your password?
-    </Link>
-  </div>
-  <Input id="password" type="password" required />
-</div>
-<Button type="submit" className="w-full">
-  Login
-</Button>
-<Button variant="outline" className="w-full">
-  Login with Google
-</Button>
-</div>  */
-}
