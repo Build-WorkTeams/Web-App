@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import RegisterImg from "@/assets/RegisterImg.png";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MailOpen } from "lucide-react";
 import { LockKeyholeOpen } from "lucide-react";
 import Google from "@/assets/google.svg";
