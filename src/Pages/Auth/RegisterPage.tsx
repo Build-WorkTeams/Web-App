@@ -18,7 +18,14 @@ import { Loader2 } from "lucide-react";
 import Google from "@/assets/google.svg";
 import apiClient from "@/services/api-client";
 import { useState } from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast"
+import capitalize from "@/utils/capitize";
 
+
+
+
+//Zod - All form validation message is defined here
 const schema = z
   .object({
     email: z.string().email().min(2).max(50),
@@ -37,6 +44,7 @@ type formData = z.infer<typeof schema>;
 
 const RegisterPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,8 +68,13 @@ const RegisterPage = () => {
         navigate("/login");
         setIsLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
         setIsLoading(false);
+        toast({
+            variant: "destructive",
+            title: "Something went wrong.",
+            description: `${capitalize(err.response.data.email[0])}`,
+          })
       });
   };
   return (
@@ -75,6 +88,7 @@ const RegisterPage = () => {
       </div>
       <div className="flex items-center justify-center py-12 lg:py-0">
         <div className="grid mx-4 lg:mx-7 xl:mx-20 xl:w-auto gap-4">
+          <Toaster />
           <div className="text-right text-sm leading-normal text-custom-gray_300">
             Already have an account?
             <Link to="/login">
