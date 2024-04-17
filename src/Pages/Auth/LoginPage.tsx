@@ -18,6 +18,9 @@ import Google from "@/assets/google.svg";
 import apiClient from "@/services/api-client";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
+import capitalize from "@/utils/capitize";
 
 const schema = z.object({
   email: z.string().email().min(2).max(50),
@@ -30,8 +33,11 @@ const schema = z.object({
 type formData = z.infer<typeof schema>;
 
 const RegisterPage = () => {
+  //Hooks
   const navigate = useNavigate();
+  const { toast } = useToast();
 
+  //States
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<formData>({
@@ -54,8 +60,13 @@ const RegisterPage = () => {
         navigate("/");
         setIsLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
         setIsLoading(false);
+        toast({
+          variant: "destructive",
+          title: "Something went wrong.",
+          description: `${capitalize(err.response.data.message)}`,
+        });
       });
   };
   return (
@@ -69,6 +80,7 @@ const RegisterPage = () => {
       </div>
       <div className="flex items-center justify-center py-12 lg:py-0">
         <div className="grid mx-4 lg:mx-7 xl:mx-20 xl:w-auto gap-4">
+          <Toaster />
           <div className="text-right text-sm leading-normal text-custom-gray_300">
             Don&apos;t have an account?
             <Link to="/register">
