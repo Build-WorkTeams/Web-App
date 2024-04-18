@@ -144,6 +144,14 @@ const RegisterPage = () => {
                     </FormItem>
                   )}
                 />
+                <Link className="flex justify-end" to="/reset">
+                  <Button
+                    variant="link"
+                    className="text-sm text-custom-purple_300 h-6"
+                  >
+                    Forgot Password?
+                  </Button>
+                </Link>
               </div>
               <Button
                 type="submit"
