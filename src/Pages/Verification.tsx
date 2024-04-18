@@ -19,12 +19,12 @@ import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 
 const schema = z.object({
-  email: z.string().email().min(2).max(50),
+  code: z.number({invalid_type_error: 'Must be 6 digits'}).min(6, {message: 'Must be 6 digits'}),
 });
 
 type formData = z.infer<typeof schema>;
 
-const PasswordReset = () => {
+const Verification = () => {
   //Hooks
   const navigate = useNavigate();
 
@@ -33,19 +33,16 @@ const PasswordReset = () => {
 
   const form = useForm<formData>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      email: "",
-    },
   });
 
   const handleRegister = (values: formData) => {
     setIsLoading(true);
     apiClient
       .post("/noendpoint", {
-        email: values.email,
+        code: values.code,
       })
       .then(() => {
-        navigate("/verify");
+        navigate("/changePassword");
         setIsLoading(false);
       })
       .catch(() => {
@@ -65,11 +62,10 @@ const PasswordReset = () => {
           </div>
           <div className="grid gap-2 mb-4">
             <h1 className="text-2xl md:text-3xl font-bold text-custom-gray_300">
-              Forgot your password?
+              Verify Code
             </h1>
             <p className="text-sm text-custom-blue_100 leading-normal md:text-[15.4px]">
-              Don’t worry, happens to all of us. Enter your email below to
-              recover your password.
+              An authentication code has been sent to your email.
             </p>
           </div>
           <Form {...form}>
@@ -80,15 +76,17 @@ const PasswordReset = () => {
               <div className="grid gap-2">
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="code"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <Input
                           className="font-body text-custom-gray_300 px-[24px] py-[20px] rounded-[20px] md:px-[28px] md:py-[24px] md:rounded-[40px] lg:px-[30px] lg:py-[26px] lg:rounded-[60px] xl:px-[34px] xl:py-[30px] xl:rounded-[80px] xl:text-lg"
-                          placeholder="Enter your Email address"
+                          placeholder="Enter code"
                           icon={<MailOpen />}
                           {...field}
+                          {...form.register('code', {valueAsNumber: true})}
+                          type="number"
                         />
                       </FormControl>
                       <FormMessage className="pl-2 xl:pl-4" />
@@ -101,7 +99,7 @@ const PasswordReset = () => {
                 className="w-full py-[20px] md:py-[24px] lg:py-[26px] xl:py-[30px] bg-custom-purple_300 rounded-[80px]"
               >
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Submit
+                Verify the code
               </Button>
             </form>
           </Form>
@@ -118,4 +116,4 @@ const PasswordReset = () => {
   );
 };
 
-export default PasswordReset;
+export default Verification;
