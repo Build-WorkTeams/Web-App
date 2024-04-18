@@ -60,7 +60,7 @@ const Verification = () => {
               </Button>
             </Link>
           </div>
-          <div className="grid gap-2 mb-4">
+          <div className="grid gap-2 mb-6">
             <h1 className="text-2xl md:text-3xl font-bold text-custom-gray_300">
               Verify Code
             </h1>
